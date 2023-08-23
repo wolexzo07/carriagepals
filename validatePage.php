@@ -1,0 +1,5 @@
+<?php
+if(!$pageToken){
+	exit();
+}
+?>

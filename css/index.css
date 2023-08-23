@@ -1,0 +1,48 @@
+.member-Panel {
+	top:2%;
+	bottom:2%;
+	left:5%;
+	right:5%;
+	position:fixed;
+	opacity:1;
+	z-index:100000;
+	width:90%;
+	height:96%;
+	background:aqua;
+	box-shadow:5px 5px 3px 3px black;
+	display:none;
+	overflow:auto;
+	padding-bottom:20pt;
+}
+#close_one_btn{
+	margin:10px;
+	font-size:13pt;
+	border:2px solid black;
+	padding:7px;
+	border-radius:500px;
+}
+#registerPanel{
+	display:none;
+}
+#resetPanel{
+	display:none;
+}
+#loginPanel{
+	display:;
+}
+.f-styler{
+	font-size:15pt;
+	color:lightblue;
+}
+.f-styler a:hover{
+	font-weight:bold;
+}
+.h-text{
+	font-weight:bold;
+	font-size:15pt;
+	color:maroon;
+	border:1px dashed maroon;
+	padding:20px;
+	border-top-right-radius:30px;
+	border-bottom-left-radius:30px;
+}

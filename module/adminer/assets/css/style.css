@@ -1,0 +1,46 @@
+.insidetext{
+	color:whitesmoke;
+	font-weight:bold;
+	font-size:25pt;
+}
+
+body{
+	background:orange;
+}
+
+.resultbox {
+	width:80%;
+	margin-top:10px;
+	margin-left:100px;
+	margin-bottom:10px;
+	margin-right:10px;
+}
+
+.tbox{
+	border-bottom:20px;
+}
+
+.btnb {
+	padding:12px;
+	margin-bottom:20pt;
+	margin-top:5pt;
+	float:right;
+	background:black;
+	color:white;
+	font-weight:bold;
+}
+
+.uploadsystem{
+	background-color:white;
+	box-shadow:2px 5px 2px 2px gray;
+	margin-bottom:20pt;
+	margin-top:20pt;
+	padding-bottom:20px;			
+	padding-top:10px;			
+	padding-left:20px;	
+	width:50%;			
+}
+
+.uploadsystem .txt{
+	font-weight:bold;
+}
