@@ -3,20 +3,17 @@
     if(!isset($PageToken)){
 		exit();
 	}
-	
-	if(x_validateget("uid")){
 		
-		$cuser = xg("uid");
-		
-			if(x_count("quotes_request","user_id='$cuser' LIMIT 1") > 0){
+			if(x_count("quotes_request","status !='' LIMIT 1") > 0){
 				?>
 				<ul class="list-group">
 				
 				<?php
 				$co = 0;
-				foreach(x_select("0","quotes_request","user_id='$cuser'","10","id desc") as $request){
+				foreach(x_select("0","quotes_request","status !=''","1000","id desc") as $request){
 					$co++;
 					$id = $request["id"];
+					$uid = $request["user_id"];
 					$amt = $request["amount_agreed"];
 					$title = $request["title"];
 					$ref = $request["ref"];
@@ -52,6 +49,13 @@
 						$smg = "Rejected";
 						$scolor = "Red";
 					}
+					
+					$name = x_getsingleupdate("manageaccount","name","id='$uid'");
+					$email= x_getsingleupdate("manageaccount","email","id='$uid'");
+					$mobile = x_getsingleupdate("manageaccount","mobile","id='$uid'");
+					$photo = x_getsingleupdate("manageaccount","user_photo","id='$uid'");
+					$dummy = "userphoto/avatar.png";
+					$getimage = x_validatePath($photo,$dummy);
 					?>
 					<li style="margin-bottom:20pt;" class="list-group-item pb-2 pt-2">
 						<span style="background-color:<?php echo $scolor;?>;" class="pull-right badge"><i class="<?php echo $statusf;?>"></i>&nbsp;<?php echo $smg;?></span>
@@ -73,6 +77,18 @@
 						<p class="pb-1"><?php echo $details;?></p>
 
 						<table class="table">
+						   <tr>
+								<th>Posted By</th>
+								<td class="f-bold"><img src="<?php echo $getimage;?>" class="img-icon"/><?php echo $name;?></td>
+							</tr>
+							<tr>
+								<th>Contact Email</th>
+								<td class=""><p class=""><?php echo $email;?></p></td>
+							</tr>
+							<tr>
+								<th>Contact Phone.</th>
+								<td class=""><?php echo $mobile;?></td>
+							</tr>
 						   <tr>
 								<th>Reference ID</th>
 								<td><?php echo $ref;?></td>
@@ -204,14 +220,14 @@
 				?></ul><?php
 			}else{
 				?>
-				<div class="text-center"><i style="font-size:100pt;color:lightgray;" class="fa fa-edit"></i>
-				<p style="color:lightgray;" class="">No request was made</p>
-				<!---<button class="btn btn-danger btn-sm mt-1"><i class="fa fa-plus"></i> Request Quote</button>--->
-				</div>
+				<p class="text-center pb-5"><i style="color:lightgray;font-size:100pt;" class="fa fa-edit"></i>
+					<br/>
+					<span style="font-size:15pt;color:gray;">No request History<span>
+				
+				</p>
 				<?php
 			}
-		
-	}
+	
 	
 	
 		

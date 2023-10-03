@@ -38,11 +38,25 @@
 
 	<script>
 	$(document).ready(function(){
-		showalert("Login successful!");
+		//showalert("Login successful!");
 		viewManager(".img-control","profile-photo");
 		pageLoader("homedash",".PageFetcher");
 	});
 	</script>
+	
+  <?php
+	if(x_validateget("pay_messages")){ // get
+		$getinfo = xg("pay_messages");
+		x_toasts("$getinfo");
+		?>
+		<script>
+		setTimeout(function(){
+			window.location="./";
+		},5000);
+		</script>
+		<?php
+	}
+  ?>
 	
 <script>
  function ad_viewManager(user_id,result,cmd){
@@ -88,6 +102,11 @@
 					if(cmdvalue == "swap-funds"){
 						viewManager("#get-usd","usd-balance");
 						viewManager("#get-ngn","ngn-balance");
+					}
+					
+					if(cmdvalue == "set-fxrate"){
+						viewManager(".r-managefx","fetch-fxrate");
+						$("#resetRate").click();
 					}
 					
 					if(cmdvalue == "uphoto"){

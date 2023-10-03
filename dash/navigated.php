@@ -21,9 +21,11 @@
 		  if(x_count("manageaccount","id='$currentuser' AND is_big='1'") > 0){
 			 ?>
 		   <li><a href="#" onclick="pageLoader('ad_Registeredusers?token=<?php echo $pageToken;?>','.PageFetcher')">Registered users</a></li>
-           <li><a href="#" onclick="pageLoader('manageRequest?token=<?php echo $pageToken;?>','.PageFetcher')">Funds TopUp</a></li>
-           <li><a href="#" onclick="pageLoader('manageRequest?token=<?php echo $pageToken;?>','.PageFetcher')">Swap History</a></li>
-           <li><a href="#" onclick="pageLoader('manageRequest?token=<?php echo $pageToken;?>','.PageFetcher')">Manage Request</a></li>
+           <li><a href="#" onclick="pageLoader('ad_fundstops?token=<?php echo $pageToken;?>','.PageFetcher')">Funds TopUp</a></li>
+           <li><a href="#" onclick="pageLoader('ad_swapHistory?token=<?php echo $pageToken;?>','.PageFetcher')">Swap History</a></li>
+           <li><a href="#" onclick="pageLoader('ad_servicepayment?token=<?php echo $pageToken;?>','.PageFetcher')">Service Payments</a></li>
+           <li><a href="#" onclick="pageLoader('ad_manageRates?token=<?php echo $pageToken;?>','.PageFetcher')">Manage Rate</a></li>
+           <li><a href="#" onclick="pageLoader('ad_manageRequests?token=<?php echo $pageToken;?>','.PageFetcher')">Manage Request</a></li>
 			 <?php 
 		  }else{
 			 ?>

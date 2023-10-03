@@ -13,6 +13,16 @@
 		<?php
 	}
 	
+	function x_userparam($switch , $userid){ // getting any column from user table
+		$query = x_getsingleupdate("manageaccount","$switch","id='$userid'");
+		return $query;
+	}
+	
+	function x_quoteparam($switch , $quoteid){ // getting any column from quotes table
+		$query = x_getsingleupdate("quotes_request","$switch","id='$quoteid'");
+		return $query;
+	}
+	
 	function x_crwbalance($switch , $userid){ // get current balance in ngn & usd
 		if($switch == "USD"){
 			$switched = "wallet_usd";
@@ -39,6 +49,11 @@
 	function x_refgen($userid){
 		$hash = substr(sha1(uniqid().$userid),0,10).str_shuffle($userid.DATE("YmdHis")).$userid;
 		return $hash;
+	}
+	
+	function x_pidgen($userid){ // payment id generator
+		$hash = substr(sha1(uniqid().$userid),0,4)."-".str_shuffle($userid.DATE("YmdHis")).$userid;
+		return strtoupper($hash);
 	}
 	
 	function x_valdimension($dimen){ // validating dimension (Lenght X Breadth X Height)

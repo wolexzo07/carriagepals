@@ -23,3 +23,9 @@
   <script src="library/imageGrid/images-grid.js"></script>
   <link rel="stylesheet" href="library/imageGrid/images-grid.css"/>
 
+  <script src="library/timeline/dist/js/timeline.min.js"></script>
+  <link rel="stylesheet" href="library/timeline/dist/css/timeline.min.css"/>
+  
+  
+  
+

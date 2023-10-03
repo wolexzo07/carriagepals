@@ -12,7 +12,7 @@
 		<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12"></div>
 		<div id="adjustModals" class="col-lg-6 col-md-6 col-sm-12 col-xs-12 paymentList">
 			
-			<div id="alert-msg"></div>
+			<div class="topup-alert mb-2"></div>
 			<!--- <script src="js/cartProcessor.js" type="text/javascript"></script>--->
 			<form id="payModalProcessor">
 				<ul class="list-group">
@@ -72,8 +72,9 @@
 									$company = $banks["company"];
 									$cvalue = $banks["cvalues"];
 									$clogo = $banks["logo"];
+									$pt_id = $banks["id"];
 									?>
-									<input required id="payOptions<?php echo $countPay;?>" type="radio" value="<?php echo $cvalue;?>" name="banks"/>&nbsp;&nbsp; <?php echo $company;?><br/><br/>
+									<input required id="payOptions<?php echo $pt_id;?>" type="radio" value="<?php echo $cvalue;?>" name="banks"/>&nbsp;&nbsp; <?php echo $company;?><br/><br/>
 									<?php
 								}
 							}

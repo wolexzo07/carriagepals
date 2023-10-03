@@ -7,10 +7,7 @@
 <script src="assets/parallax/jarallax.js"></script>
 <script src="assets/smoothscroll/smooth-scroll.js"></script>
 <script src="assets/ytplayer/index.js"></script>
-<script src="assets/smart-cart/minicart.js"></script>
-<script src="assets/smart-cart/minicart-customizer.js"></script>
 <script src="assets/dropdown/js/navbar-dropdown.js"></script>
-<script src="assets/formoid.min.js"></script>
   
 <script>
 $(document).ready(function(){

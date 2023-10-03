@@ -123,6 +123,7 @@
 		viewManager(".swap-details","fetch-swap");
 		viewManager(".quotes-details","fetch-rq");
 		formpusher("#funds-mover",".swap-result","swap-funds");
+		formpusher("#payModalProcessor",".topup-alert","topup-funds");
 		
 		$(".swap-button").click(function(){
 			$(".swap-funds").show("500");

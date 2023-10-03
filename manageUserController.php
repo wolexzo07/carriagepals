@@ -54,6 +54,7 @@ if(x_validatesession("XCAPE_HACKS") && x_validateget("cmd") && x_validateget("ha
 				if($cmd == "lg"){ // Handling Login
 						
 						if(x_validatepost("_token")){
+							
 							$uname = x_clean(x_post("username"));
 							$pass = x_clean(x_post("password"));
 							$hash = x_phasher($pass);
@@ -78,11 +79,13 @@ if(x_validatesession("XCAPE_HACKS") && x_validateget("cmd") && x_validateget("ha
 										$name = $user["name"];
 										$email = $user["email"];
 										$mobile = $user["mobile"];
+										$token = md5($id).sha1($email);
 										
 										$_SESSION["CARRIAGE_PAL_ID"] = $id;
 										$_SESSION["CARRIAGE_PAL_NAME"] = $name;
 										$_SESSION["CARRIAGE_PAL_EMAIL"] = $email;
 										$_SESSION["CARRIAGE_PAL_MOBILE"] = $mobile;
+										$_SESSION["CARRIAGE_PAL_TOKEN"] = $token;
 										
 										finish("./dash","0");
 									}

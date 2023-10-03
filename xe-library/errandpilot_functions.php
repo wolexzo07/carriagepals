@@ -64,13 +64,13 @@
 	}
 		
 
-			// send mails
+	// send mails
 	function ep_mailer($title,$content,$user_email){
-			if(file_exists("../siteinfo.php")){
-				require("../siteinfo.php");
-			}else{
-				require("siteinfo.php");
-			}
+		if(file_exists("../siteinfo.php")){
+			include("../siteinfo.php");
+		}else{
+			include("siteinfo.php");
+		}
 		$date = Date("Y");
 		$titl = strip_tags($title);
 		$subject = "$sitename : $titl";

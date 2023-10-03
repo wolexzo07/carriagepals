@@ -39,7 +39,9 @@ if(x_validateget("hashkey") && x_validateget("cmd") && x_validatesession("CARRIA
 					","innodb");
 					
 					$swapTable = x_dbtab("funds_swap","
+					user_id INT NOT NULL,
 					type ENUM('','n2d','d2n') NOT NULL,
+					what_rate  DOUBLE NOT NULL,
 					amount DOUBLE NOT NULL,
 					amt_after_conversion DOUBLE NOT NULL,
 					ngn_balance DOUBLE NOT NULL,
@@ -91,13 +93,14 @@ if(x_validateget("hashkey") && x_validateget("cmd") && x_validatesession("CARRIA
 									
 									// updating new balance
 									
+									
 									x_update("manageaccount","id='$user'","wallet_ngn=wallet_ngn-$inputamount , wallet_usd=wallet_usd + $amt_in_dollar","","");
 									
 									// creating transaction history
 									$timed = x_curtime(0,0);
 									$rtimed = x_curtime(0,1);
 									
-									x_insert("type,amount, amt_after_conversion,ngn_balance,usd_balance,timed,rtimer,status,os,br,ip","funds_swap","'n2d','$inputamount','$amt_in_dollar','$newbal_in_ngn','$newbal_in_usd','$timed','$rtimed','1','$os','$br','$ip'","<script>showalert('Transaction completed successfully!')</script>","<script>showalert('Failed to complete Transaction!')</script>");
+									x_insert("what_rate,user_id,type,amount, amt_after_conversion,ngn_balance,usd_balance,timed,rtimer,status,os,br,ip","funds_swap","'$sellRate','$user','n2d','$inputamount','$amt_in_dollar','$newbal_in_ngn','$newbal_in_usd','$timed','$rtimed','1','$os','$br','$ip'","<script>showalert('Transaction completed successfully!')</script>","<script>showalert('Failed to complete Transaction!')</script>");
 									
 								}
 								
@@ -132,7 +135,7 @@ if(x_validateget("hashkey") && x_validateget("cmd") && x_validatesession("CARRIA
 									$rtimed = x_curtime(0,1);
 									
 									
-									x_insert("type,amount,amt_after_conversion,ngn_balance,usd_balance,timed,rtimer,status,os,br,ip","funds_swap","'d2n','$inputamount','$amt_in_ngn','$newbal_in_ngn','$newbal_in_usd','$timed','$rtimed','1','$os','$br','$ip'","<script>showalert('Transaction completed successfully!')</script>","<script>showalert('Failed to complete Transaction!')</script>");
+									x_insert("what_rate,user_id,type,amount,amt_after_conversion,ngn_balance,usd_balance,timed,rtimer,status,os,br,ip","funds_swap","'$buyRate','$user','d2n','$inputamount','$amt_in_ngn','$newbal_in_ngn','$newbal_in_usd','$timed','$rtimed','1','$os','$br','$ip'","<script>showalert('Transaction completed successfully!')</script>","<script>showalert('Failed to complete Transaction!')</script>");
 									
 								}
 								
@@ -154,14 +157,14 @@ if(x_validateget("hashkey") && x_validateget("cmd") && x_validatesession("CARRIA
 		
 		if($cmd == "fetch-swap"){ // funds swapping
 			
-			if(x_count("funds_swap","status='1' OR status='0'") > 0){
+			if(x_count("funds_swap","user_id='$user' AND status='1' OR status='0'") > 0){
 				 ?><ul class="list-group tr-sact">
 					<li class="list-group-item">
 						<h3 class="h-text">TRANSACTION <span class="g-color">DETAILS</span></h3>
 					</li>
 					<?php
 					$count = 0;
-				foreach(x_select("0","funds_swap","status='1' OR status='0'","9","id desc") as $td){
+				foreach(x_select("0","funds_swap","user_id='$user' AND status='1' OR status='0'","9","id desc") as $td){
 					$count++;
 					$id = $td["id"];
 					$type = $td["type"];
@@ -195,7 +198,26 @@ if(x_validateget("hashkey") && x_validateget("cmd") && x_validatesession("CARRIA
 				?></ul><?php
 				
 			}else{
+				?>
+				<ul class="list-group ">
+					<li class="list-group-item">
+						<h3 class="h-text">SWAP <span class="g-color">HISTORY</span></h3>
+						
+					    <div class="pt-5 pb-5 text-center"><i style="font-size:100pt;color:lightgray;" class="fa fa-dollar"></i>
+						  <p style="color:lightgray;" class="mt-1">No swap record found</p>
+						  <button id="swap-button" class="btn btn-success btn-sm mt-1 mb-2"><i class="fa fa-plus"></i> Swap Funds</button>
+						</div>
+					</li>
+				</ul>
+				<script>
+					$(document).ready(function(){
+						$("#swap-button").click(function(){
+							$(".swap-funds").show("500");
+						});
+					});
+				</script>
 				
+				<?php
 			}
 			
 		}
@@ -379,14 +401,19 @@ if(x_validateget("hashkey") && x_validateget("cmd") && x_validatesession("CARRIA
 				}
 				?></ul><?php
 			}else{
+				if(x_validatesession("XCAPE_HACKS")){
+		
+					$pageToken = $_SESSION["XCAPE_HACKS"];
+					
+				}
 				?>
 				<ul class="list-group ">
 					<li class="list-group-item">
 						<h3 class="h-text">REQUESTED <span class="g-color">QUOTES</span></h3>
 						
 					    <div class="pt-5 pb-5 text-center"><i style="font-size:100pt;color:lightgray;" class="fa fa-edit"></i>
-						  <p style="color:lightgray;" class="">No request was made</p>
-						  <button class="btn btn-danger btn-sm mt-1 mb-2"><i class="fa fa-plus"></i> Request Quote</button>
+						  <p style="color:lightgray;" class="mt-1">No request was made</p>
+						  <button onclick="pageLoader('requestQuotes?token=<?php echo $pageToken;?>','.PageFetcher')" class="btn btn-danger btn-sm mt-1 mb-2"><i class="fa fa-plus"></i> Request Quote</button>
 						</div>
 					</li>
 				</ul>
@@ -399,6 +426,7 @@ if(x_validateget("hashkey") && x_validateget("cmd") && x_validatesession("CARRIA
 		
 			if(x_count("quotes_request","user_id='$user' LIMIT 1") > 0){
 				?>
+				
 				<ul class="list-group">
 					<!---<li class="list-group-item">
 						<h3 class="h-text">REQUESTED <span class="g-color">QUOTES</span></h3>
@@ -420,9 +448,17 @@ if(x_validateget("hashkey") && x_validateget("cmd") && x_validatesession("CARRIA
 					$status = $request["status"];
 					$dt = $request["dated"];
 					$rdt = $request["rdated"];
-					
 					$is_paid = $request["is_paid"];
 					$paid_on = $request["paid_on"];
+					
+					$pro_status = $request["in_processing"];
+					$processed_on = $request["processed_on"];
+					
+					$shipping_status = $request["is_shipped"];
+					$shipped_on = $request["shipped_on"];
+					
+					$delivery_status = $request["is_delivered"];
+					$delivered_on = $request["delivered_on"];
 					
 					$img_count = $request["images_count"];
 					$is_image = $request["is_images"];
@@ -462,6 +498,8 @@ if(x_validateget("hashkey") && x_validateget("cmd") && x_validatesession("CARRIA
 						?>
 						
 						<p class="pb-1"><?php echo $details;?></p>
+						
+						
 
 						<table class="table">
 						   <tr>
@@ -482,6 +520,7 @@ if(x_validateget("hashkey") && x_validateget("cmd") && x_validatesession("CARRIA
 									}
 								?></td>
 							</tr>
+							
 							
 							<?php
 							if($is_paid == 1){
@@ -516,9 +555,32 @@ if(x_validateget("hashkey") && x_validateget("cmd") && x_validatesession("CARRIA
 							
 							if($status == 1){
 								?>
-								<button class="btn btn-default btn-sm pull-left">Send message&nbsp;&nbsp; 
+								<style>
+									#timeviewer<?php echo $id;?>{}
+								</style>
+								
+								<div id="timeviewer<?php echo $id;?>" class="tviewer">
+									<?php include("timeline_bank.php");?>
+								</div>
+								
+								<!--<button class="btn btn-default btn-sm">Send message&nbsp;&nbsp; 
 								<span class="badge">0</span>
-								</button>
+								</button>-->
+								
+								<button id="openTracker<?php echo $id;?>" class="btn btn-info btn-sm ml-1"><i class="fa fa-map-marker"></i>&nbsp; Order status</button>
+								
+								<script>
+									$(document).ready(function(){
+										
+										$("#openTracker<?php echo $id;?>").click(function(){
+											
+												$("#timeviewer<?php echo $id;?>").toggle("500");
+											
+										});
+										
+									});
+								</script>
+
 								<?php
 							}
 							
@@ -526,8 +588,20 @@ if(x_validateget("hashkey") && x_validateget("cmd") && x_validatesession("CARRIA
 							
 							if($status == 1){
 								?>
-								<button class="btn btn-primary btn-sm pull-left">Make payment
-								</button>
+								<form id="push-payments<?php echo $id;?>">
+									<input type="hidden" value="<?php echo $id;?>" name="request_id"/>
+									<button class="btn btn-primary btn-sm">Make payment
+									</button>
+								</form>
+								
+								<div class="x_getpushed<?php echo $id;?>"></div>
+								
+								<script>
+									$(document).ready(function(){
+										formpusher("#push-payments<?php echo $id;?>",".x_getpushed<?php echo $id;?>","make-payment");
+									});
+								</script>
+								
 								<?php
 							}
 							
@@ -537,7 +611,16 @@ if(x_validateget("hashkey") && x_validateget("cmd") && x_validatesession("CARRIA
 					</li>
 					<?php
 				}
-				?></ul><?php
+				?></ul>
+				<script>
+					timeline(document.querySelectorAll('.timeline'), {
+					  forceVerticalMode: 700,
+					  mode: 'horizontal',
+					  verticalStartPosition: 'left',
+					  visibleItems: 4
+					});
+				</script>
+				<?php
 			}else{
 				?>
 				<div class="text-center"><i style="font-size:100pt;color:lightgray;" class="fa fa-edit"></i>
@@ -686,12 +769,98 @@ if(x_validateget("hashkey") && x_validateget("cmd") && x_validatesession("CARRIA
 			?><img src="<?php echo $getimage;?>" class="img-responsive"/><?php
 		}
 		
+		
+		if($cmd == "make-payment"){
+			
+			if(x_validatepost("request_id")){
+				
+				$id = xp("request_id"); $quoteid = $id;
+				$ref_id = x_quoteparam("ref" , $quoteid);
+				$amount = x_quoteparam("amount_agreed" , $quoteid);
+				
+				$userid = $user; $getname = x_userparam("name" , $userid);
+				$switch = "USD"; $currency = $switch;
+				$inputamount = $amount; $pid = x_pidgen($userid); // generating payment id;
+				
+				$time = x_curtime(0,1);
+				
+				$create = x_dbtab("payments_forservices","
+				user_id INT NOT NULL,
+				payment_id INT NOT NULL,
+				agreed_amount DOUBLE NOT NULL,
+				paid_amount DOUBLE NOT NULL,
+				status ENUM('0','1') NOT NULL,
+				timed VARCHAR(30) NOT NULL
+				","innoDB");
+				
+				// getting user current balance
+				
+				$usd_balance = x_crwbalance($switch , $userid);
+				
+				// checking for account sufficiency
+				
+				x_balsufficient($currency , $inputamount , $userid);
+				
+				$newusdbalance = $usd_balance - $inputamount;
+				
+				// push payments
+				
+				if(x_count("quotes_request","id='$id' AND is_paid='1'") > 0){
+					
+					x_toasts("Paid was made before!");
+					
+				}else{
+					
+					// updating logged-in user usd wallet
+					
+					x_updated("manageaccount","id='$user'","wallet_usd=wallet_usd-$inputamount","<script>showalert('Balance updated successfully')</script>","<script>showalert('Failed updating balance')</script>");
+					
+					// update request 
+					
+					$timestamp = x_curtime(0,0);
+					
+					x_updated("quotes_request","id='$id'","is_paid='1',paid_on='$timestamp'","<script>showalert('Quote status was updated successfully')</script>","<script>showalert('Failed updating quote status')</script>");
+					
+					// initializing mailer
+					
+					$fusd = number_format($inputamount,2);
+					
+					$title = "Your payment of $fusd was successful";
+
+					$content = "Hi <b>$getname</b><br/><br/>
+					We are delighted to inform you that your payment of <b>USD $fusd</b> for your order with ref-id (<b>#$ref_id</b>) was successful.
+					";
+					
+					$useremail = x_userparam("email",$userid);
+					
+					ep_mailer($title,$content,$useremail); // send emails to users
+					
+					// Insert payment records
+					
+					x_insert("user_id,payment_id,agreed_amount,paid_amount,status,timed","payments_forservices","'$user','$pid','$inputamount','$inputamount','1','$time'","<script>showalert('Payments was made successfully')</script>","<script>showalert('Failed to push Payments! Kindly contact support!')</script>");
+					
+				}
+				
+			}
+			
+		}
+		
+		if($cmd == "topup-funds"){
+			
+			include_once("processTopup.php");
+			
+		}
+		
 		// Admin page manager
 		
 		if(x_count("manageaccount","id='$user' AND is_big='1'") > 0){
+			
 			include("adminController.php");
+			
 		}
 	
 }
 
 ?>
+
+

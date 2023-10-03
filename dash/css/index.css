@@ -1,3 +1,9 @@
+.tviewer{
+	margin-top:10pt;
+	margin-bottom:10pt;
+	padding:10pt;
+}
+
 .txt-settings{
 	font-size:11pt;
 }
@@ -66,6 +72,8 @@
 	font-weight:bold;
 }
 
+.d-none{display:none;}
+.d-block{display:block;}
 .f-bold{font-weight:bold;}
 
 .g-color{color:Tomato;}

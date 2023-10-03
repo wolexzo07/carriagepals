@@ -24,13 +24,13 @@
 						
 						<div class="row mt-2 pb-5">
   
-							<div class="col-lg-2 col-md-2 col-12"></div>
-							<div class="col-lg-8 col-md-8 col-12">
+							<div class="col-lg-1 col-md-1 col-12"></div>
+							<div class="col-lg-10 col-md-10 col-12">
 								
 								<div class="quotes-details"></div>
 							
 							</div>
-							<div class="col-lg-2 col-md-2 col-12"></div>
+							<div class="col-lg-1 col-md-1 col-12"></div>
 						
 						</div>
 						
